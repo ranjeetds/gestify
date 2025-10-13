@@ -1,0 +1,14 @@
+opencv-python==4.10.0.84
+mediapipe==0.10.14
+numpy==1.26.4
+pyautogui==0.9.54
+pillow==10.3.0
+requests==2.31.0
+python-dotenv==1.0.1
+
+# Optional: Hugging Face Transformers for Qwen 2.5 VL
+transformers==4.44.2
+torch==2.1.2
+accelerate==0.24.1
+qwen-vl-utils==0.0.2
+
