@@ -18,6 +18,7 @@ A professional Python library for hand gesture recognition and AR games using co
 ### 🎮 AR Games (New!)
 - **Puzzle Game**: Match shapes using hand gestures
 - **Ping Pong**: Two-player competitive game with hand-controlled paddles
+- **AR Piano**: Play piano and learn songs with falling note guides
 - **Full HD**: 1080p fullscreen immersive experience
 - **Natural Controls**: Direct hand tracking for intuitive gameplay
 
@@ -82,6 +83,26 @@ python run_pingpong.py
 - Move hand UP/DOWN to control paddle
 - First to 11 points wins!
 
+### AR Piano
+
+```bash
+# Play piano and learn songs
+python run_piano.py
+```
+
+**Controls:**
+- Position hands above piano keys
+- Touch keys with fingertips to play
+- Press 1-4 to select a song
+- Follow falling notes to learn songs
+- Build combos for higher scores!
+
+**Songs Available:**
+- Happy Birthday
+- Twinkle Twinkle Little Star
+- Mary Had a Little Lamb
+- Jingle Bells
+
 ## 📖 Library Usage
 
 ### Basic Gesture Control
@@ -140,6 +161,17 @@ controller = PingPongGameController(
 controller.run()
 ```
 
+```python
+# AR Piano
+from gestify_lib.games import ARPianoController
+
+controller = ARPianoController(
+    game_width=1920,
+    game_height=1080
+)
+controller.run()
+```
+
 ## 🎯 Gesture Reference
 
 | Gesture | Hand Shape | Action | Use Case |
@@ -187,6 +219,28 @@ controller.run()
 **Controls:**
 - Move hand up/down: Control paddle
 - Hands automatically assigned to left/right players
+
+### AR Piano
+
+**Objective:** Play piano and learn songs
+
+**Features:**
+- 8 playable piano keys (C to C5)
+- 4 pre-loaded songs
+- Falling note guides (like Piano Tiles)
+- Score and combo system
+- Real-time hit detection
+
+**Controls:**
+- Touch keys with fingertips: Play notes
+- Follow falling notes: Learn songs
+- Build combos: Higher scores
+
+**Songs:**
+- Happy Birthday
+- Twinkle Twinkle Little Star
+- Mary Had a Little Lamb
+- Jingle Bells
 
 ## 🛠️ Project Structure
 
@@ -392,6 +446,10 @@ For issues, questions, or suggestions:
 
 **Made with ❤️ for natural human-computer interaction**
 
-🎮 **Try the games:** `python run_ar_game.py` or `python run_pingpong.py`  
+🎮 **Try the games:**  
+`python run_ar_game.py` - Puzzle  
+`python run_pingpong.py` - Ping Pong  
+`python run_piano.py` - AR Piano  
+
 ✋ **Control your computer:** `gestify --fast`  
 📚 **Read the code:** Well-documented, easy to extend
