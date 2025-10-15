@@ -1,509 +1,414 @@
-# Gestify - AI-Powered Hand Gesture Control 🖐️
+# 🎮 Gestify - AI-Powered Hand Gesture Control
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![MediaPipe](https://img.shields.io/badge/MediaPipe-Hand_Tracking-green.svg)](https://mediapipe.dev/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform: macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://www.apple.com/macos/)
-[![Optimized: M1](https://img.shields.io/badge/optimized-Apple_Silicon-red.svg)](https://www.apple.com/mac/)
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)]()
 
-Control your Mac using hand gestures detected through your webcam. Powered by MediaPipe for real-time hand tracking and optional AI enhancement with Qwen 2.5 VL or Ollama.
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/google/mediapipe/master/docs/images/mobile/hand_tracking_3d_android_gpu.gif" width="400" alt="Hand Tracking Demo"/>
-  <p><i>Real-time hand gesture recognition powered by MediaPipe</i></p>
-</div>
+Control your computer with hand gestures using AI-powered computer vision. Gestify is a professional, object-oriented library that turns your webcam into a natural user interface.
 
 ## ✨ Features
 
-- 🖐️ **15+ Hand Gestures** - From basic pointing to advanced pinch zoom and rotation
-- 🤖 **AI Enhancement** - Optional AI assistance with Qwen 2.5 VL or Ollama
-- ⚡ **Real-time Tracking** - 30-50 FPS on Apple Silicon (M1/M2/M3)
-- 🎯 **High Accuracy** - MediaPipe hand landmark detection with smoothing
-- 🪶 **Lightweight** - Pure Python, no Xcode required
-- 🔧 **Customizable** - Easy threshold and behavior adjustments
-- 🎨 **Interactive UI** - Live camera feed with gesture overlay
+### 🎯 Simplified Gesture Set
+**Distinct, non-overlapping gestures** designed to prevent confusion:
+- ☝️ **Index Finger**: Move cursor
+- ✌️ **Peace Sign**: Drag & drop
+- 👌 **Pinch**: Click (double pinch for double-click)
+- ✊ **Fist**: Scroll
+- 🖐️ **Open Palm**: Pause/Play
+- 👍 **Thumbs Up**: Confirm (Enter)
+- 👎 **Thumbs Down**: Cancel (Escape)
+- 🤲 **Two Hands**: Zoom in/out, Rotate
 
-## 📹 Demo
+### 🧠 Smart Features
+- **Attention Detection**: Uses face tracking to only respond when you're looking at the screen
+- **Two-Hand Support**: Advanced gestures using both hands simultaneously
+- **Gesture Cooldown**: Prevents unintentional repeated actions
+- **Cursor Smoothing**: Precise, jitter-free cursor movement
+- **Configurable Modes**: Fast, Accurate, and Two-Hand presets
 
-<div align="center">
-  
-| Gesture | Action | Demo |
-|---------|--------|------|
-| ☝️ **Point** | Move cursor | ![Point](https://via.placeholder.com/150x100/4CAF50/FFFFFF?text=Point) |
-| 🤏 **Pinch** | Click | ![Pinch](https://via.placeholder.com/150x100/2196F3/FFFFFF?text=Pinch) |
-| ✊ **Fist** | Drag | ![Fist](https://via.placeholder.com/150x100/FF9800/FFFFFF?text=Fist) |
-| 🖐 **Palm** | Space | ![Palm](https://via.placeholder.com/150x100/9C27B0/FFFFFF?text=Palm) |
+### 🏗️ Professional Architecture
+- Object-oriented, modular design
+- Easy-to-use API
+- Comprehensive configuration options
+- Installable as a Python package
+- Extensive examples and documentation
 
-</div>
-
-## 🚀 Quick Start
+## 📦 Installation
 
 ### Prerequisites
+- Python 3.8 or higher
+- Webcam
+- macOS, Linux, or Windows
 
-- macOS 12.0 or later
-- Python 3.9+
-- Webcam (built-in or external)
-- Good lighting
-
-### Installation
+### Quick Install
 
 ```bash
 # Clone the repository
 git clone https://github.com/ranjeetds/gestify.git
 cd gestify
 
-# Run automated setup
-./setup.sh
-
-# Or manually:
+# Create virtual environment (recommended)
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
+
+# Optional: Install as package (enables 'gestify' command)
+pip install -e .
 ```
 
-### Grant Permissions
-
-**Required: Accessibility Permission**
-
-1. Open **System Preferences** → **Security & Privacy** → **Privacy** → **Accessibility**
-2. Click the **lock** icon and enter your password
-3. Click **+** and add **Terminal** (or your IDE)
-4. Enable the checkbox ✅
-
-**Automatic: Camera Permission**
-- Will be requested on first run
-
-### Run Gestify
+### Alternative: Setup Script (macOS/Linux)
 
 ```bash
-# Activate virtual environment
-source venv/bin/activate
-
-# Basic version (7 gestures, 40-50 FPS)
-python gestify.py
-
-# Enhanced version (15+ gestures, 30-45 FPS) - Recommended
-python gestify_enhanced.py
-
-# With Ollama AI assistance
-python gestify_enhanced.py --ai
-
-# With Qwen 2.5 VL (best accuracy, requires installation)
-./install_qwen.sh  # First time only
-python gestify_enhanced.py --qwen --ai
+chmod +x setup.sh
+./setup.sh
 ```
 
-## 🎮 Gesture Guide
+## 🚀 Quick Start
 
-### Basic Gestures (7)
+### Option 1: Command Line
 
-| Gesture | How To | Action | Use Case |
-|---------|--------|--------|----------|
-| ☝️ **Point** | Index finger only | Move cursor | Navigation |
-| 🤏 **Pinch** | Thumb + Index close | Click | Selection |
-| ✊ **Fist** | All fingers closed | Drag | Move items |
-| 🖐 **Palm** | All fingers open | Release/Space | Drop or pause |
-| ✌️ **Peace** | Index + Middle | Scroll | Browse content |
-| 👍 **Thumbs Up** | Thumb up | Enter | Confirm |
-| 👎 **Thumbs Down** | Thumb down | Escape | Cancel |
+```bash
+# Run with default settings
+python -m gestify_lib
 
-### Enhanced Gestures (15+)
+# Or if installed as package
+gestify
 
-| Gesture | How To | Action | Use Case |
-|---------|--------|--------|----------|
-| 🤏🤏 **Double Pinch** | 2x rapid pinch | Double click | Open files |
-| 🤏⬆️ **Pinch In** | Pinch fingers closer | Zoom In (Cmd++) | Magnify |
-| 🤏⬇️ **Pinch Out** | Pinch fingers apart | Zoom Out (Cmd+-) | Reduce size |
-| 👋 **Wave** | Move wrist side-to-side | Back (Cmd+[) | Navigate back |
-| ⬅️ **Swipe Left** | Fast move left | Desktop left | Switch workspace |
-| ➡️ **Swipe Right** | Fast move right | Desktop right | Switch workspace |
-| 🔄 **Two-Finger Twist** | Rotate peace sign | Rotate | Image rotation |
-| 👌 **OK Sign** | Thumb+Index circle | Close Window (Cmd+W) | Close apps |
+# Fast mode (single hand, no face tracking)
+gestify --fast
 
-## 📊 Performance
+# Accurate mode (higher confidence thresholds)
+gestify --accurate
 
-Tested on MacBook Pro M1 (16GB RAM):
+# Two-hand gesture mode
+gestify --two-hand
 
-| Configuration | FPS | CPU | Memory | Accuracy | Best For |
-|--------------|-----|-----|--------|----------|----------|
-| **Basic MediaPipe** | 40-50 | 20-25% | 150 MB | 85-90% | Speed |
-| **Enhanced MediaPipe** | 35-45 | 25-30% | 200 MB | 88-92% | Features |
-| **+ Ollama AI** | 30-40 | 25-35% | 250 MB | 90-93% | Balance |
-| **+ Qwen 2.5 VL** | 20-30 | 30-40% | 350 MB | 93-97% | Accuracy |
+# Custom camera
+gestify --camera 1
 
-## 🏗️ Architecture
+# Disable face tracking
+gestify --no-face
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Camera Input                          │
-│                   (OpenCV Capture)                       │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────┐
-│              MediaPipe Hand Detection                    │
-│           (21-point landmark extraction)                 │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────┐
-│            Gesture Classification                        │
-│  ┌──────────────────┬──────────────────────────────┐   │
-│  │  MediaPipe Only  │  AI Enhancement (Optional)   │   │
-│  │  • Distance calc │  • Ollama Vision Models      │   │
-│  │  • Angle detect  │  • Qwen 2.5 VL (Hugging Face)│  │
-│  │  • Finger ext.   │  • Complex pose recognition  │   │
-│  └──────────────────┴──────────────────────────────┘   │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────┐
-│            Action Execution                              │
-│          (PyAutoGUI System Control)                      │
-│  • Mouse movement  • Clicks  • Keyboard  • Scroll       │
-└─────────────────────────────────────────────────────────┘
+# Show help
+gestify --help
 ```
 
-## 🛠️ Project Structure
+### Option 2: Python Script
 
+```python
+from gestify_lib import GestifyController
+
+# Run with default settings
+controller = GestifyController()
+controller.run()
 ```
-gestify/
-├── gestify.py              # Basic version (7 gestures)
-├── gestify_enhanced.py     # Enhanced version (15+ gestures)
-├── requirements.txt        # Python dependencies
-├── setup.sh               # Automated setup script
-├── install_qwen.sh        # Qwen 2.5 VL installer
-├── fix_camera.sh          # Camera troubleshooter
-├── test_setup.py          # Setup verification
-├── .gitignore            # Git ignore rules
-├── README.md             # This file
-└── ENHANCED_GUIDE.md     # Detailed guide
+
+### Option 3: Custom Configuration
+
+```python
+from gestify_lib import GestifyController, GestifyConfig
+
+# Create custom configuration
+config = GestifyConfig(
+    max_hands=1,                     # Single hand only
+    enable_face_tracking=False,       # Disable face tracking
+    hand_model_complexity=0,          # Use lite model (faster)
+    cursor_smoothing=5,              # Smoothing level (1-10)
+    gesture_cooldown=0.25,            # Seconds between gestures
+    show_debug=True,                  # Show debug info
+)
+
+# Create and run controller
+controller = GestifyController(config)
+controller.run()
 ```
+
+## 📖 Gesture Reference
+
+| Gesture | Hand Shape | Action | Notes |
+|---------|-----------|---------|-------|
+| **Cursor Move** | ☝️ Only index finger extended | Move mouse cursor | Smooth, precise tracking |
+| **Click** | 👌 Quick pinch (thumb + index) | Left click | Release immediately |
+| **Double Click** | 👌👌 Two quick pinches | Double left click | Within 0.5 seconds |
+| **Drag** | ✌️ Peace sign (index + middle) | Click and drag | Keep peace sign while moving |
+| **Drag End** | Change from peace to any other | Release drag | Automatically releases |
+| **Scroll** | ✊ Fist moving up/down | Scroll | Speed = hand velocity |
+| **Pause/Play** | 🖐️ All 5 fingers extended | Press Space | Toggle media playback |
+| **Confirm** | 👍 Thumbs up | Press Enter | Accept/submit |
+| **Cancel** | 👎 Thumbs down | Press Escape | Cancel/back |
+| **Zoom In** | 🤲 Two hands moving apart | Cmd/Ctrl + | Requires two-hand mode |
+| **Zoom Out** | 🤲 Two hands moving together | Cmd/Ctrl - | Requires two-hand mode |
+| **Rotate CW** | 🤲 Rotate both hands clockwise | Rotate right | Application specific |
+| **Rotate CCW** | 🤲 Rotate both hands counter-clockwise | Rotate left | Application specific |
 
 ## ⚙️ Configuration
 
-### Adjust Gesture Sensitivity
+### Preset Modes
 
-Edit `gestify_enhanced.py` (lines ~234-238):
+#### Fast Mode
+Optimized for speed and responsiveness:
+```python
+config = GestifyConfig.fast_mode()
+```
+- Single hand only
+- Lite hand model
+- No face tracking
+- Less cursor smoothing
+
+#### Accurate Mode
+Optimized for precision:
+```python
+config = GestifyConfig.accurate_mode()
+```
+- Higher confidence thresholds
+- Full hand model
+- Face tracking enabled
+- More cursor smoothing
+
+#### Two-Hand Mode
+Optimized for two-hand gestures:
+```python
+config = GestifyConfig.two_hand_mode()
+```
+- Detects 2 hands
+- Two-hand gestures enabled
+- Face tracking enabled
+
+### Custom Configuration Options
 
 ```python
-self.pinch_threshold = 0.04      # Lower = more sensitive
-self.swipe_threshold = 150       # Pixels for swipe detection
-self.wave_threshold = 40         # Pixels for wave oscillation
-self.rotation_threshold = 15     # Degrees for rotation
-self.action_cooldown = 0.2       # Seconds between actions
+config = GestifyConfig(
+    # Camera settings
+    camera_index=0,              # Camera device index
+    camera_width=640,            # Frame width
+    camera_height=480,           # Frame height
+    camera_fps=30,               # Target FPS
+    
+    # Hand detection
+    max_hands=2,                 # 1 or 2 hands
+    hand_confidence=0.7,         # Detection confidence (0-1)
+    hand_tracking_confidence=0.5, # Tracking confidence (0-1)
+    hand_model_complexity=0,     # 0=lite, 1=full
+    
+    # Face tracking
+    enable_face_tracking=True,   # Enable attention detection
+    face_confidence=0.5,         # Face detection confidence
+    attention_threshold=3,       # Frames needed for attention
+    
+    # Gesture settings
+    gesture_cooldown=0.25,       # Seconds between gestures
+    cursor_smoothing=5,          # Cursor smoothing frames (1-10)
+    pinch_threshold=20,          # Pinch distance (pixels)
+    
+    # Two-hand gestures
+    enable_two_hand=True,        # Enable two-hand gestures
+    
+    # UI settings
+    show_ui=True,                # Show camera window
+    show_debug=False,            # Show debug info
+    show_fps=True,               # Show FPS counter
+)
 ```
 
-### Change Camera Resolution
+## 🎯 Use Cases
 
-Edit camera setup (lines ~51-53):
+### Presentations
+- Control slides with gestures
+- Pause/play videos with open palm
+- Navigate with thumbs up/down
 
-```python
-self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)   # Width
-self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # Height
-self.cap.set(cv2.CAP_PROP_FPS, 30)            # FPS
+### Media Playback
+- Control video player without touching keyboard
+- Scroll through content with fist gestures
+- Pause/play with palm gesture
+
+### Accessibility
+- Alternative input method for users with limited keyboard access
+- Hands-free computer control
+- Customizable gesture mappings
+
+### Gaming & VR
+- Natural gesture controls
+- Immersive interaction
+- Prototype gesture-based interfaces
+
+## 🏗️ Library Structure
+
 ```
-
-### AI Model Selection
-
-```bash
-# Ollama models (if installed)
-ollama list | grep vision
-
-# Use specific model in code (line ~73)
-self.ollama_model = "llama3.2-vision:latest"  # or llava:13b
-
-# Qwen model selection (line ~180)
-model_name = "Qwen/Qwen2-VL-2B-Instruct"  # Fast
-# model_name = "Qwen/Qwen2-VL-7B-Instruct"  # Accurate
-```
-
-## 🤖 AI Enhancement
-
-### Option 1: Ollama (Recommended)
-
-**Pros:** Fast, local, good accuracy  
-**Cons:** Need to install Ollama
-
-```bash
-# Install Ollama
-brew install ollama
-
-# Start service
-ollama serve
-
-# Pull a vision model
-ollama pull llama3.2-vision
-
-# Run Gestify with AI
-python gestify_enhanced.py --ai
-```
-
-### Option 2: Qwen 2.5 VL (Best Accuracy)
-
-**Pros:** State-of-the-art accuracy  
-**Cons:** Slower, 4.5GB download
-
-```bash
-# One-time installation
-./install_qwen.sh
-
-# Run with Qwen
-python gestify_enhanced.py --qwen --ai
-```
-
-### Option 3: MediaPipe Only (Fastest)
-
-**Pros:** No AI dependencies, fastest  
-**Cons:** Lower accuracy for complex gestures
-
-```bash
-# Just run without --ai flag
-python gestify_enhanced.py
-```
-
-## 💡 Tips & Best Practices
-
-### For Best Performance
-
-- ✅ **Good lighting** - Face a window or bright lamp
-- ✅ **Clean background** - Plain wall or backdrop
-- ✅ **Optimal distance** - 1-2 feet from camera
-- ✅ **Show full hand** - Include wrist in frame
-- ✅ **Smooth movements** - Deliberate, not jerky
-- ❌ **Avoid** - Dark rooms, backlighting, cluttered backgrounds
-
-### Gesture Technique
-
-1. **Point** - Keep other fingers clearly closed
-2. **Pinch** - Bring thumb and index very close (<25 pixels)
-3. **Fist** - Close all fingers tightly
-4. **Wave** - Move wrist side-to-side at least 2-3 times
-5. **Swipe** - Fast lateral movement (>150 pixels)
-6. **Rotation** - Use clear peace sign, rotate smoothly
-
-### Troubleshooting
-
-#### Camera Not Working
-```bash
-# Check camera availability
-python3 -c "import cv2; print('Camera:', cv2.VideoCapture(0).isOpened())"
-
-# Run troubleshooter
-./fix_camera.sh
-
-# Close other camera apps (Zoom, FaceTime, etc.)
-```
-
-#### Gestures Not Controlling System
-```bash
-# Grant Accessibility permissions:
-# System Preferences → Security & Privacy → Privacy → Accessibility
-# Add Terminal and enable checkbox
-
-# Restart Terminal after granting permissions
-```
-
-#### Low FPS / Laggy
-```bash
-# Close other apps
-# Lower camera resolution (edit gestify.py, line 51-53)
-# Disable AI if enabled
-# Ensure good lighting
-```
-
-#### Hand Not Detected
-```bash
-# Improve lighting
-# Move closer (1-2 feet optimal)
-# Show full hand including wrist
-# Try different background
+gestify/
+├── gestify_lib/                    # Main library package
+│   ├── __init__.py                # Package exports
+│   ├── __main__.py                # CLI entry point
+│   ├── core/                      # Core components
+│   │   ├── controller.py          # Main controller
+│   │   └── config.py              # Configuration management
+│   ├── detectors/                 # Detection modules
+│   │   ├── hand_detector.py       # Hand detection (MediaPipe)
+│   │   ├── face_detector.py       # Face & attention tracking
+│   │   └── gesture_recognizer.py  # Gesture recognition logic
+│   └── utils/                     # Utility modules
+│       ├── action_executor.py     # System action execution
+│       └── ui_renderer.py         # UI rendering
+├── examples/                      # Example scripts
+│   ├── basic_usage.py
+│   ├── custom_config.py
+│   └── two_hand_mode.py
+├── setup.py                       # Package setup
+├── requirements.txt               # Dependencies
+└── README.md                      # This file
 ```
 
 ## 🔧 Development
 
+### Project Structure
+
+The library is organized into distinct modules:
+
+- **`core/`**: Main controller and configuration
+- **`detectors/`**: Hand, face, and gesture detection
+- **`utils/`**: System actions and UI rendering
+
 ### Adding Custom Gestures
 
-1. **Define detection logic** in `detect_gesture_enhanced()`:
+To add a new gesture, modify `gesture_recognizer.py`:
 
 ```python
-def detect_gesture_enhanced(self, landmarks) -> str:
-    # Your custom gesture detection
-    if your_condition:
-        return "my_custom_gesture"
-    # ... existing gestures
+# 1. Add gesture to enum
+class Gesture(Enum):
+    MY_GESTURE = auto()
+
+# 2. Add recognition logic
+def _recognize_single_hand(self, state: HandState) -> Gesture:
+    # Your detection logic here
+    if state.fingers_extended == [True, True, False, False, False]:
+        return Gesture.MY_GESTURE
+    ...
+
+# 3. Add action to action_executor.py
+def execute(self, gesture: Gesture, cursor_pos=None):
+    if gesture == Gesture.MY_GESTURE:
+        # Your action here
+        pyautogui.press('f')
 ```
-
-2. **Add action** in `execute_enhanced_action()`:
-
-```python
-elif gesture == "my_custom_gesture":
-    pyautogui.hotkey('command', 'custom')
-    print("🎯 Custom action")
-```
-
-3. **Update UI guide** in `draw_enhanced_ui()` gestures list
 
 ### Running Tests
 
 ```bash
-# Test setup
-python test_setup.py
+# Install dev dependencies
+pip install -e ".[dev]"
 
-# Test camera
-./fix_camera.sh
+# Run tests (when available)
+pytest tests/
 
-# Run with debug output
-python gestify_enhanced.py --ai 2>&1 | tee debug.log
+# Run linting
+flake8 gestify_lib/
+black gestify_lib/
 ```
 
-### Contributing
+## 🐛 Troubleshooting
 
-Contributions are welcome! Please:
+### Camera Issues
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+**Problem**: Camera not found or not opening
 
-## 📖 Documentation
+**Solutions**:
+1. Check if another app is using the camera (Zoom, FaceTime, etc.)
+2. Grant camera permissions in System Preferences (macOS)
+3. Try different camera index: `gestify --camera 1`
+4. Run camera fix script: `python fix_camera.sh`
 
-- **[ENHANCED_GUIDE.md](ENHANCED_GUIDE.md)** - Comprehensive guide with all features
-- **Inline Code Comments** - Extensive documentation in source files
+### Permission Issues (macOS)
 
-## 🐛 Known Issues & Limitations
+**Problem**: Gestures not controlling system
 
-- **Single Hand Only** - Currently detects one hand at a time
-- **Lighting Dependent** - Requires good lighting conditions
-- **2D Detection** - No depth sensing (no z-axis)
-- **macOS Specific** - PyAutoGUI commands configured for macOS
-- **Rotation Limited** - Works best in Preview/Photos apps
-- **Wave Timing** - Needs deliberate side-to-side motion
-- **AI Latency** - AI queries every 3 seconds, not real-time
+**Solutions**:
+1. Grant Accessibility permissions: System Preferences → Security & Privacy → Privacy → Accessibility
+2. Grant Screen Recording permissions (for cursor control)
 
-## 🗺️ Roadmap
+### Performance Issues
 
-- [ ] Two-hand gesture support
-- [ ] Gesture recording and macros
-- [ ] Custom gesture training
-- [ ] Windows/Linux compatibility
-- [ ] Web UI for configuration
-- [ ] Mobile app companion
-- [ ] Multi-monitor support
-- [ ] Depth camera support
-- [ ] Voice command integration
-- [ ] Plugin system for custom actions
+**Problem**: Low FPS or laggy gestures
 
-## 🎓 Use Cases
+**Solutions**:
+1. Use fast mode: `gestify --fast`
+2. Disable face tracking: `gestify --no-face`
+3. Reduce camera resolution: `gestify --width 320 --height 240`
+4. Use single hand: `gestify --max-hands 1`
+5. Close other resource-intensive applications
 
-### Productivity
-- Hands-free navigation while taking notes
-- Control presentations without touching keyboard
-- Quick window management during multitasking
+### Gesture Detection Issues
 
-### Accessibility
-- Alternative input method for RSI sufferers
-- Hands-free control for mobility challenges
-- Customizable for specific needs
+**Problem**: Gestures not recognized reliably
 
-### Creative Work
-- Scrub through video timelines
-- Zoom in/out of design documents
-- Quick media playback control
+**Solutions**:
+1. Ensure good lighting
+2. Keep hand at comfortable distance from camera (30-60cm)
+3. Use accurate mode: `gestify --accurate`
+4. Increase confidence threshold: `gestify --hand-confidence 0.8`
+5. Make gestures more distinct and deliberate
 
-### Entertainment
-- Control media players hands-free
-- Navigate menus during cooking
-- Gaming controls (custom mappings)
+## 💡 Tips for Best Experience
 
-## 📊 Benchmarks
+1. **Lighting**: Ensure good, even lighting on your hands
+2. **Distance**: Keep hands 30-60cm from camera
+3. **Background**: Plain background helps detection
+4. **Distinct Gestures**: Make clear, deliberate gestures
+5. **Practice**: Spend a few minutes learning gesture shapes
+6. **Calibration**: Adjust `cursor_smoothing` and `gesture_cooldown` to your preference
 
-Detailed latency measurements on M1 MacBook Pro:
+## 🤝 Contributing
 
-```
-Component Breakdown:
-├─ Camera Capture:       0.8ms
-├─ Hand Detection:       12-15ms (MediaPipe)
-├─ Gesture Classification: 0.5-1.2ms
-├─ Smoothing:            0.1ms
-├─ Action Execution:     0.2ms
-└─ Total Latency:        ~15-18ms
+Contributions are welcome! Please feel free to submit issues or pull requests.
 
-AI Enhancement (when enabled):
-├─ Ollama Query:         100-150ms (every 3s)
-├─ Qwen Query:           300-500ms (every 3s)
-└─ Average Impact:       Minimal (amortized)
+### Development Setup
 
-Frame Processing:
-├─ 640x480 @ 30 FPS:    33ms/frame budget
-├─ Actual Processing:    15-18ms
-└─ Headroom:            15ms (45% margin)
+```bash
+# Clone repo
+git clone https://github.com/ranjeetds/gestify.git
+cd gestify
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install in development mode
+pip install -e ".[dev]"
+
+# Make changes and test
+python -m gestify_lib
 ```
 
-## 🙏 Acknowledgments
-
-- **[MediaPipe](https://mediapipe.dev/)** by Google - Hand tracking and landmark detection
-- **[OpenCV](https://opencv.org/)** - Computer vision and video capture
-- **[PyAutoGUI](https://pyautogui.readthedocs.io/)** - Cross-platform GUI automation
-- **[Ollama](https://ollama.ai/)** - Local AI model serving
-- **[Qwen 2.5 VL](https://huggingface.co/Qwen)** by Alibaba - Vision-language model
-- **[Transformers](https://huggingface.co/transformers/)** by Hugging Face - Model inference
-
-## 📄 License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-```
-MIT License
+## 🙏 Acknowledgments
 
-Copyright (c) 2024 Gestify Contributors
+- **MediaPipe**: Hand and face detection
+- **OpenCV**: Computer vision and camera capture
+- **PyAutoGUI**: System control and automation
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+## 🔮 Future Enhancements
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+- [ ] Custom gesture recording and training
+- [ ] Gesture macros and scripting
+- [ ] Multi-monitor support
+- [ ] Voice command integration
+- [ ] Mobile app for remote control
+- [ ] Plugin system for custom actions
+- [ ] Gesture history and analytics
+- [ ] Pre-trained gesture models
+- [ ] Web interface for configuration
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-```
+## 📧 Contact
 
-## 💬 Support
-
-- 🐛 **Bug Reports:** [GitHub Issues](https://github.com/ranjeetds/gestify/issues)
-- 💡 **Feature Requests:** [GitHub Issues](https://github.com/ranjeetds/gestify/issues)
-- 📧 **Contact:** Open an issue on GitHub
-
-## ⭐ Show Your Support
-
-If you find Gestify useful, please consider:
-
-- ⭐ **Star** this repository
-- 🐛 **Report** bugs and issues
-- 💡 **Suggest** new features
-- 🔀 **Contribute** code improvements
-- 📢 **Share** with others
-
-## 📈 Stats
-
-![Python](https://img.shields.io/badge/Python-90%25-blue)
-![Shell](https://img.shields.io/badge/Shell-5%25-green)
-![Markdown](https://img.shields.io/badge/Markdown-5%25-lightgrey)
+For questions, issues, or suggestions, please open an issue on GitHub:
+https://github.com/ranjeetds/gestify/issues
 
 ---
 
-<div align="center">
-  
-**Made with ❤️ for the macOS community**
+**Made with ❤️ by the Gestify team**
 
-**Control your Mac with just a wave! 👋**
-
-[⬆ Back to Top](#gestify---ai-powered-hand-gesture-control-)
-
-</div>
+*Control your computer naturally with the power of AI*

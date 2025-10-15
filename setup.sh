@@ -1,110 +1,105 @@
 #!/bin/bash
-# Setup script for Gestify on M1 MacBook Pro
 
-echo "╔═══════════════════════════════════════╗"
-echo "║    Gestify Setup for M1 MacBook       ║"
-echo "╚═══════════════════════════════════════╝"
-echo ""
+# Colors for output
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+clear
+echo -e "${BLUE}╔════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║    ${GREEN}🎮 Gestify Setup v2.0${BLUE}            ║${NC}"
+echo -e "${BLUE}╚════════════════════════════════════════╝${NC}\n"
 
 # Check Python version
-echo "🔍 Checking Python version..."
+echo -e "${YELLOW}⚙️  Checking Python version...${NC}"
 python3 --version
 
 if [ $? -ne 0 ]; then
-    echo "❌ Python 3 not found. Please install Python 3.9 or later."
+    echo -e "${RED}❌ Python 3 is not installed. Please install Python 3.8 or higher.${NC}"
     exit 1
 fi
 
+# Check Python version is 3.8+
+python3 -c "import sys; exit(0 if sys.version_info >= (3, 8) else 1)"
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Python 3.8 or higher is required${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}✅ Python version OK${NC}"
+
 # Create virtual environment
-echo ""
-echo "📦 Creating virtual environment..."
+echo -e "\n${YELLOW}📦 Creating virtual environment...${NC}"
 python3 -m venv venv
 
 if [ $? -ne 0 ]; then
-    echo "❌ Failed to create virtual environment"
+    echo -e "${RED}❌ Failed to create virtual environment${NC}"
     exit 1
 fi
 
+echo -e "${GREEN}✅ Virtual environment created${NC}"
+
 # Activate virtual environment
-echo "✅ Virtual environment created"
-echo ""
-echo "🔧 Activating virtual environment..."
+echo -e "\n${YELLOW}🔧 Activating virtual environment...${NC}"
 source venv/bin/activate
 
 # Upgrade pip
-echo "⬆️  Upgrading pip..."
-pip install --upgrade pip
+echo -e "\n${YELLOW}📈 Upgrading pip...${NC}"
+pip install --upgrade pip --quiet
 
 # Install requirements
-echo ""
-echo "📥 Installing dependencies..."
+echo -e "\n${YELLOW}📥 Installing dependencies...${NC}"
+echo -e "${BLUE}   This may take a few minutes...${NC}\n"
 pip install -r requirements.txt
 
 if [ $? -ne 0 ]; then
-    echo "❌ Failed to install dependencies"
+    echo -e "${RED}❌ Failed to install dependencies${NC}"
     exit 1
 fi
 
-echo ""
-echo "✅ Dependencies installed successfully"
+echo -e "\n${GREEN}✅ Dependencies installed${NC}"
 
-# Check if Ollama is installed
-echo ""
-echo "🔍 Checking for Ollama..."
-if command -v ollama &> /dev/null; then
-    echo "✅ Ollama found"
-    
-    # Check if Ollama is running
-    if curl -s http://localhost:11434/api/tags > /dev/null 2>&1; then
-        echo "✅ Ollama is running"
-        
-        # Check if qwen2.5-vl model is available
-        if ollama list | grep -q "qwen2.5-vl"; then
-            echo "✅ Qwen 2.5 VL model found"
-        else
-            echo "⚠️  Qwen 2.5 VL model not found"
-            echo ""
-            read -p "Would you like to download it now? (y/n) " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-                echo "📥 Downloading Qwen 2.5 VL 7B (this may take a while)..."
-                ollama pull qwen2.5-vl:7b
-            else
-                echo "ℹ️  You can download it later with: ollama pull qwen2.5-vl:7b"
-            fi
-        fi
-    else
-        echo "⚠️  Ollama is not running"
-        echo "ℹ️  Start it with: ollama serve"
-        echo "ℹ️  Then pull model with: ollama pull qwen2.5-vl:7b"
-    fi
-else
-    echo "⚠️  Ollama not found"
-    echo "ℹ️  Install with: brew install ollama"
-    echo "ℹ️  Or visit: https://ollama.ai"
-    echo ""
-    echo "Note: Ollama is optional - Gestify works with MediaPipe only"
+# Install package in development mode
+echo -e "\n${YELLOW}🔨 Installing Gestify package...${NC}"
+pip install -e .
+
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Failed to install package${NC}"
+    exit 1
 fi
 
-echo ""
-echo "═══════════════════════════════════════"
-echo "✅ Setup Complete!"
-echo "═══════════════════════════════════════"
-echo ""
-echo "📋 Next Steps:"
-echo ""
-echo "1. Grant Accessibility Permissions:"
-echo "   System Preferences → Security & Privacy → Privacy → Accessibility"
-echo "   Add Terminal (or your Python IDE) and enable it"
-echo ""
-echo "2. Run Gestify:"
-echo "   source venv/bin/activate"
-echo "   python gestify.py"
-echo ""
-echo "3. Controls:"
-echo "   Q - Quit"
-echo "   A - Toggle AI assist (if Ollama installed)"
-echo ""
-echo "📖 For more info, see README.md"
-echo ""
+echo -e "${GREEN}✅ Gestify package installed${NC}"
 
+# Test installation
+echo -e "\n${YELLOW}🧪 Testing installation...${NC}"
+python3 test_setup.py
+
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Installation test failed${NC}"
+    exit 1
+fi
+
+echo -e "\n${GREEN}✅ All tests passed!${NC}"
+
+# Print success message
+echo -e "\n${BLUE}╔════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║    ${GREEN}✅ Setup Complete!${BLUE}                ║${NC}"
+echo -e "${BLUE}╚════════════════════════════════════════╝${NC}\n"
+
+echo -e "${YELLOW}🚀 Quick Start:${NC}\n"
+echo -e "1. Activate virtual environment:"
+echo -e "   ${GREEN}source venv/bin/activate${NC}\n"
+echo -e "2. Run Gestify:"
+echo -e "   ${GREEN}gestify${NC}                 # Command line"
+echo -e "   ${GREEN}python run_gestify.py${NC}   # Direct script\n"
+echo -e "3. Try different modes:"
+echo -e "   ${GREEN}gestify --fast${NC}          # Fast mode"
+echo -e "   ${GREEN}gestify --accurate${NC}      # Accurate mode"
+echo -e "   ${GREEN}gestify --two-hand${NC}      # Two-hand mode\n"
+echo -e "4. Get help:"
+echo -e "   ${GREEN}gestify --help${NC}\n"
+
+echo -e "${BLUE}📖 See README.md for full documentation${NC}"
+echo -e "${BLUE}🐛 Issues? Check fix_camera.sh or README troubleshooting section${NC}\n"
