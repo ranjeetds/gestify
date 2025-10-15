@@ -30,6 +30,9 @@ from .detectors.hand_detector import HandDetector
 from .detectors.face_detector import FaceDetector, AttentionTracker
 from .detectors.gesture_recognizer import GestureRecognizer
 
+# AR Games module
+from . import games
+
 __all__ = [
     'GestifyController',
     'GestifyConfig',
@@ -37,5 +40,6 @@ __all__ = [
     'FaceDetector',
     'AttentionTracker',
     'GestureRecognizer',
+    'games',
 ]
 

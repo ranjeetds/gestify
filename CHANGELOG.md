@@ -1,129 +1,85 @@
 # Changelog
 
-All notable changes to Gestify will be documented in this file.
+All notable changes to this project will be documented in this file.
 
-## [2.0.0] - 2025-10-15
+## [3.0.0] - 2025-10-15
 
-### 🎉 Major Release - Complete Rewrite
+### Added - AR Games Platform
+- **AR Puzzle Game**: Interactive shape-matching game with hand gesture controls
+  - Pick and place mechanics using pinch gestures
+  - 5 different shapes (circle, square, triangle, star, heart)
+  - 3 difficulty levels (easy, medium, hard)
+  - Score tracking and particle effects
+  - Full HD 1080p fullscreen experience
 
-This is a complete rewrite of Gestify as a professional, object-oriented library.
+- **AR Ping Pong**: Two-player competitive game
+  - Hand-controlled paddles for left and right players
+  - Dynamic ball physics with speed increases
+  - Score tracking (first to 11 wins)
+  - Smooth hand tracking with 5-frame buffer
+  - Intelligent 2-hand selection (nearest hands only)
+  - Buffer zones to prevent player confusion
 
-### ✨ Added
+- **Games Module** (`gestify_lib/games/`)
+  - `ARGameController` - Puzzle game controller
+  - `PingPongGameController` - Ping pong game controller
+  - `PuzzleGame` - Puzzle game logic
+  - `PingPongGame` - Ping pong game logic
+  - `GameObject`, `PuzzlePiece`, `TargetZone` - Game objects
+  - `Ball`, `Paddle` - Ping pong components
 
-#### Architecture
-- **Object-Oriented Design**: Complete modular architecture with clean separation of concerns
-- **Library Structure**: Proper Python package with installable setup
-- **CLI Tool**: Full command-line interface with multiple options
-- **Configuration System**: Comprehensive config management with presets
-- **Example Scripts**: Multiple examples demonstrating different use cases
+### Improved - Hand Tracking
+- **Direct Hand Tracking**: Cursor always follows index finger position
+  - Removed gesture dependency for cursor movement
+  - Natural mirror-mode control
+  - Reduced latency (~40ms vs ~50ms)
 
-#### Core Features
-- **Simplified Gestures**: 13 distinct, non-overlapping gestures
-  - Cursor Move (index finger)
-  - Click & Double Click (pinch)
-  - Drag & Drop (peace sign)
-  - Scroll (fist)
-  - Pause (open palm)
-  - Confirm/Cancel (thumbs up/down)
-  - Two-hand gestures (zoom, rotate)
+- **Hysteresis Thresholds**: Stable pinch-and-hold
+  - Different thresholds for grab (60px) vs release (90px)
+  - 30px buffer zone prevents accidental drops
+  - Smooth hand movement doesn't break hold
 
-- **Attention Detection**: Face tracking to prevent unintentional actions
-- **Two-Hand Support**: Advanced gestures using both hands
-- **Smart Features**:
-  - Gesture cooldown prevention
-  - Cursor smoothing
-  - Velocity-based scrolling
-  - State tracking for drag operations
+- **Multi-Hand Selection**: Intelligent hand filtering
+  - Selects only 2 nearest/largest hands
+  - Ignores background people
+  - Allows hands to leave/enter frame gracefully
 
-#### Components
-- **Core**:
-  - `GestifyController`: Main orchestration class
-  - `GestifyConfig`: Configuration management with presets
+- **Smoothing Improvements**:
+  - 5-frame history buffer for hand positions
+  - 80/20 weighted averaging for paddle movement
+  - 3-frame smoothing for cursor (reduced from 5)
 
-- **Detectors**:
-  - `HandDetector`: MediaPipe-based hand tracking
-  - `FaceDetector`: Face landmark detection
-  - `AttentionTracker`: Eye gaze estimation
-  - `GestureRecognizer`: Intelligent gesture recognition
+### Fixed
+- Mirror mode: Cursor now moves in correct direction
+- Pinch stability: Objects don't drop during lateral hand movement
+- Player assignment: Buffer zone prevents paddle swapping
+- Hand coordination: Smooth paddle control without jitter
 
-- **Utils**:
-  - `ActionExecutor`: System action execution
-  - `UIRenderer`: Camera feed visualization
+### Changed
+- Consolidated documentation into single README.md
+- Restructured as proper library with games as examples
+- Updated project structure for better organization
 
-#### Developer Experience
-- **Examples**: 3 comprehensive example scripts
-- **Documentation**: Professional README with extensive guides
-- **Setup Scripts**: Automated setup with `setup.sh`
-- **Testing**: Environment verification with `test_setup.py`
-- **Packaging**: Proper `setup.py` for pip installation
+## [2.0.0] - Previous Version
 
-### 🔄 Changed
+### Complete Architectural Rewrite
+- Transformed from scripts to professional Python library
+- Object-oriented structure with modular design
+- 13 distinct, non-overlapping gestures
+- Attention detection with face tracking
+- Configurable modes (fast, accurate, two-hand)
+- CLI tool and Python API
+- Comprehensive documentation
 
-- **Gesture Set**: Redesigned from overlapping to distinct gestures
-- **Dependencies**: Simplified to core libraries only (removed Ollama/Transformers)
-- **Performance**: Optimized with lite model option and configurable complexity
-- **UI**: Enhanced visualization with FPS counter, debug info, and status indicators
-
-### 🗑️ Removed
-
-- **Old Scripts**: Removed `gestify.py`, `gestify_enhanced.py`, `gestify_v2.py`
-- **AI Integration**: Removed Ollama and Qwen dependencies (kept simple and focused)
-- **Redundant Docs**: Consolidated multiple markdown files into single README
-- **Swift Code**: Removed all macOS-specific Swift implementation
-
-### 🐛 Fixed
-
-- Camera initialization reliability
-- Gesture detection accuracy
-- Cursor jitter issues
-- Memory leaks in detector cleanup
-- Thread safety in UI rendering
-
-### 📚 Documentation
-
-- Comprehensive README with:
-  - Quick start guide
-  - Detailed gesture reference
-  - Configuration options
-  - Troubleshooting section
-  - Development guide
-- Inline code documentation
-- Type hints throughout
-
-### 🎯 Migration from v1.x
-
-If you're using the old version:
-
-1. **Backup your customizations**
-2. **Install v2.0**: `pip install -e .`
-3. **Use the new API**:
-
-```python
-# Old way
-from gestify import GestureController
-controller = GestureController()
-
-# New way
-from gestify_lib import GestifyController
-controller = GestifyController()
-controller.run()
-```
-
-4. **Check the examples** in the `examples/` directory
+### Core Features
+- Hand detection with MediaPipe
+- Face tracking and attention detection
+- Gesture recognition with cooldown
+- Action execution with PyAutoGUI
+- UI rendering and feedback
+- Robust camera initialization
+- Error handling and cleanup
 
 ---
 
-## [1.0.0] - 2025-10-14
-
-### Initial Release
-
-- Basic hand gesture recognition
-- MediaPipe integration
-- PyAutoGUI system control
-- Optional Ollama AI assistance
-- 7 core gestures
-
----
-
-**Note**: Version 2.0.0 is not backward compatible with 1.x due to complete architectural changes.
-
+For more details, see the [GitHub repository](https://github.com/ranjeetds/gestify)

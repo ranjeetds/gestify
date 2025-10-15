@@ -1,414 +1,397 @@
-# 🎮 Gestify - AI-Powered Hand Gesture Control
+# 🎮 Gestify - Hand Gesture Control & AR Games Library
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)]()
 
-Control your computer with hand gestures using AI-powered computer vision. Gestify is a professional, object-oriented library that turns your webcam into a natural user interface.
+A professional Python library for hand gesture recognition and AR games using computer vision. Control your computer naturally with hand gestures or play interactive AR games!
 
 ## ✨ Features
 
-### 🎯 Simplified Gesture Set
-**Distinct, non-overlapping gestures** designed to prevent confusion:
-- ☝️ **Index Finger**: Move cursor
-- ✌️ **Peace Sign**: Drag & drop
-- 👌 **Pinch**: Click (double pinch for double-click)
-- ✊ **Fist**: Scroll
-- 🖐️ **Open Palm**: Pause/Play
-- 👍 **Thumbs Up**: Confirm (Enter)
-- 👎 **Thumbs Down**: Cancel (Escape)
-- 🤲 **Two Hands**: Zoom in/out, Rotate
+### 🎯 Gesture Control Library
+- **13 Distinct Gestures**: Move cursor, click, drag, scroll, and more
+- **Smart Detection**: Attention tracking, gesture cooldown, cursor smoothing
+- **Two-Hand Support**: Advanced multi-hand gestures (zoom, rotate)
+- **Professional API**: Easy-to-use, well-documented, configurable
+- **Production Ready**: Robust error handling, resource cleanup
 
-### 🧠 Smart Features
-- **Attention Detection**: Uses face tracking to only respond when you're looking at the screen
-- **Two-Hand Support**: Advanced gestures using both hands simultaneously
-- **Gesture Cooldown**: Prevents unintentional repeated actions
-- **Cursor Smoothing**: Precise, jitter-free cursor movement
-- **Configurable Modes**: Fast, Accurate, and Two-Hand presets
-
-### 🏗️ Professional Architecture
-- Object-oriented, modular design
-- Easy-to-use API
-- Comprehensive configuration options
-- Installable as a Python package
-- Extensive examples and documentation
+### 🎮 AR Games (New!)
+- **Puzzle Game**: Match shapes using hand gestures
+- **Ping Pong**: Two-player competitive game with hand-controlled paddles
+- **Full HD**: 1080p fullscreen immersive experience
+- **Natural Controls**: Direct hand tracking for intuitive gameplay
 
 ## 📦 Installation
 
-### Prerequisites
-- Python 3.8 or higher
-- Webcam
-- macOS, Linux, or Windows
-
-### Quick Install
-
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/ranjeetds/gestify.git
 cd gestify
 
-# Create virtual environment (recommended)
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Optional: Install as package (enables 'gestify' command)
-pip install -e .
-```
-
-### Alternative: Setup Script (macOS/Linux)
-
-```bash
+# Setup (creates venv and installs dependencies)
 chmod +x setup.sh
 ./setup.sh
+
+# Activate environment
+source venv/bin/activate
+
+# Install as package (optional)
+pip install -e .
 ```
 
 ## 🚀 Quick Start
 
-### Option 1: Command Line
+### Gesture Control
 
 ```bash
-# Run with default settings
+# Run gesture control
 python -m gestify_lib
 
 # Or if installed as package
-gestify
-
-# Fast mode (single hand, no face tracking)
 gestify --fast
-
-# Accurate mode (higher confidence thresholds)
-gestify --accurate
-
-# Two-hand gesture mode
-gestify --two-hand
-
-# Custom camera
-gestify --camera 1
-
-# Disable face tracking
-gestify --no-face
-
-# Show help
-gestify --help
 ```
 
-### Option 2: Python Script
+### AR Puzzle Game
+
+```bash
+# Play shape matching puzzle
+python run_ar_game.py
+
+# Or with difficulty
+python run_ar_game.py easy    # 3 shapes
+python run_ar_game.py medium  # 4 shapes
+python run_ar_game.py hard    # 5 shapes
+```
+
+**Controls:**
+- Move hand to control cursor
+- Pinch fingers to pick objects
+- Hold pinch and move to drag
+- Release to place objects
+
+### AR Ping Pong
+
+```bash
+# Two-player ping pong
+python run_pingpong.py
+```
+
+**Controls:**
+- LEFT PLAYER: Show hand on left side
+- RIGHT PLAYER: Show hand on right side
+- Move hand UP/DOWN to control paddle
+- First to 11 points wins!
+
+## 📖 Library Usage
+
+### Basic Gesture Control
 
 ```python
 from gestify_lib import GestifyController
 
-# Run with default settings
+# Simple usage
 controller = GestifyController()
 controller.run()
 ```
 
-### Option 3: Custom Configuration
+### Custom Configuration
 
 ```python
 from gestify_lib import GestifyController, GestifyConfig
 
-# Create custom configuration
-config = GestifyConfig(
-    max_hands=1,                     # Single hand only
-    enable_face_tracking=False,       # Disable face tracking
-    hand_model_complexity=0,          # Use lite model (faster)
-    cursor_smoothing=5,              # Smoothing level (1-10)
-    gesture_cooldown=0.25,            # Seconds between gestures
-    show_debug=True,                  # Show debug info
-)
+# Fast mode configuration
+config = GestifyConfig.fast_mode()
+controller = GestifyController(config)
+controller.run()
 
-# Create and run controller
+# Custom configuration
+config = GestifyConfig(
+    max_hands=1,
+    enable_face_tracking=False,
+    cursor_smoothing=5,
+    hand_confidence=0.7
+)
 controller = GestifyController(config)
 controller.run()
 ```
 
-## 📖 Gesture Reference
+### AR Games API
 
-| Gesture | Hand Shape | Action | Notes |
-|---------|-----------|---------|-------|
-| **Cursor Move** | ☝️ Only index finger extended | Move mouse cursor | Smooth, precise tracking |
-| **Click** | 👌 Quick pinch (thumb + index) | Left click | Release immediately |
-| **Double Click** | 👌👌 Two quick pinches | Double left click | Within 0.5 seconds |
-| **Drag** | ✌️ Peace sign (index + middle) | Click and drag | Keep peace sign while moving |
-| **Drag End** | Change from peace to any other | Release drag | Automatically releases |
-| **Scroll** | ✊ Fist moving up/down | Scroll | Speed = hand velocity |
-| **Pause/Play** | 🖐️ All 5 fingers extended | Press Space | Toggle media playback |
-| **Confirm** | 👍 Thumbs up | Press Enter | Accept/submit |
+```python
+# Puzzle Game
+from gestify_lib.games import ARGameController
+
+controller = ARGameController(
+    game_width=1920,
+    game_height=1080,
+    difficulty="medium"
+)
+controller.run()
+```
+
+```python
+# Ping Pong
+from gestify_lib.games import PingPongGameController
+
+controller = PingPongGameController(
+    game_width=1920,
+    game_height=1080
+)
+controller.run()
+```
+
+## 🎯 Gesture Reference
+
+| Gesture | Hand Shape | Action | Use Case |
+|---------|-----------|--------|----------|
+| **Cursor Move** | ☝️ Index finger | Move cursor | Navigation |
+| **Click** | 👌 Pinch | Left click | Selection |
+| **Double Click** | 👌👌 Two pinches | Double click | Open files |
+| **Drag** | ✌️ Peace sign | Click & drag | Move items |
+| **Scroll** | ✊ Fist moving | Scroll | Browse content |
+| **Pause** | 🖐️ Open palm | Press Space | Media control |
+| **Confirm** | 👍 Thumbs up | Press Enter | Confirm action |
 | **Cancel** | 👎 Thumbs down | Press Escape | Cancel/back |
-| **Zoom In** | 🤲 Two hands moving apart | Cmd/Ctrl + | Requires two-hand mode |
-| **Zoom Out** | 🤲 Two hands moving together | Cmd/Ctrl - | Requires two-hand mode |
-| **Rotate CW** | 🤲 Rotate both hands clockwise | Rotate right | Application specific |
-| **Rotate CCW** | 🤲 Rotate both hands counter-clockwise | Rotate left | Application specific |
+| **Zoom In** | 🤲 Hands apart | Zoom in | Maps, images |
+| **Zoom Out** | 🤲 Hands together | Zoom out | Maps, images |
+
+## 🎮 AR Games
+
+### Puzzle Game
+
+**Objective:** Match colored shapes to their target zones
+
+**Features:**
+- 5 different shapes (circle, square, triangle, star, heart)
+- Pick and place mechanics
+- Score tracking
+- 3 difficulty levels
+- Particle effects
+
+**Controls:**
+- Point finger: Move cursor
+- Pinch: Pick/place objects
+- Hold & drag: Move objects around
+
+### Ping Pong
+
+**Objective:** Two-player competitive ping pong
+
+**Features:**
+- Hand-controlled paddles
+- Dynamic ball physics
+- Score tracking (first to 11 wins)
+- Ball speeds up with each hit
+- Smooth hand tracking
+
+**Controls:**
+- Move hand up/down: Control paddle
+- Hands automatically assigned to left/right players
+
+## 🛠️ Project Structure
+
+```
+gestify/
+├── gestify_lib/              # Main library
+│   ├── core/                 # Core functionality
+│   │   ├── controller.py     # Main controller
+│   │   └── config.py         # Configuration
+│   ├── detectors/            # Detection modules
+│   │   ├── hand_detector.py  # Hand tracking
+│   │   ├── face_detector.py  # Face/attention
+│   │   └── gesture_recognizer.py  # Gestures
+│   ├── utils/                # Utilities
+│   │   ├── action_executor.py  # System actions
+│   │   └── ui_renderer.py    # UI rendering
+│   └── games/                # AR Games
+│       ├── ar_game_controller.py  # Puzzle game
+│       ├── pingpong_controller.py # Ping pong
+│       ├── game_objects.py   # Game objects
+│       ├── puzzle_game.py    # Puzzle logic
+│       └── pingpong_game.py  # Pong logic
+├── examples/                 # Example scripts
+│   ├── basic_usage.py
+│   ├── custom_config.py
+│   ├── ar_puzzle_game.py
+│   └── ar_ping_pong.py
+├── run_ar_game.py           # Quick puzzle launcher
+├── run_pingpong.py          # Quick pong launcher
+├── requirements.txt         # Dependencies
+└── setup.py                 # Package setup
+```
 
 ## ⚙️ Configuration
 
 ### Preset Modes
 
-#### Fast Mode
-Optimized for speed and responsiveness:
 ```python
+from gestify_lib import GestifyConfig
+
+# Fast mode (speed optimized)
 config = GestifyConfig.fast_mode()
-```
-- Single hand only
-- Lite hand model
-- No face tracking
-- Less cursor smoothing
 
-#### Accurate Mode
-Optimized for precision:
-```python
+# Accurate mode (precision optimized)
 config = GestifyConfig.accurate_mode()
-```
-- Higher confidence thresholds
-- Full hand model
-- Face tracking enabled
-- More cursor smoothing
 
-#### Two-Hand Mode
-Optimized for two-hand gestures:
-```python
+# Two-hand mode (multi-hand gestures)
 config = GestifyConfig.two_hand_mode()
 ```
-- Detects 2 hands
-- Two-hand gestures enabled
-- Face tracking enabled
 
-### Custom Configuration Options
+### Custom Configuration
 
 ```python
 config = GestifyConfig(
     # Camera settings
-    camera_index=0,              # Camera device index
-    camera_width=640,            # Frame width
-    camera_height=480,           # Frame height
-    camera_fps=30,               # Target FPS
+    camera_index=0,
+    camera_width=640,
+    camera_height=480,
+    camera_fps=30,
     
-    # Hand detection
-    max_hands=2,                 # 1 or 2 hands
-    hand_confidence=0.7,         # Detection confidence (0-1)
-    hand_tracking_confidence=0.5, # Tracking confidence (0-1)
-    hand_model_complexity=0,     # 0=lite, 1=full
+    # Detection settings
+    max_hands=2,
+    hand_confidence=0.7,
+    face_confidence=0.5,
+    enable_face_tracking=True,
     
-    # Face tracking
-    enable_face_tracking=True,   # Enable attention detection
-    face_confidence=0.5,         # Face detection confidence
-    attention_threshold=3,       # Frames needed for attention
-    
-    # Gesture settings
-    gesture_cooldown=0.25,       # Seconds between gestures
-    cursor_smoothing=5,          # Cursor smoothing frames (1-10)
-    pinch_threshold=20,          # Pinch distance (pixels)
-    
-    # Two-hand gestures
-    enable_two_hand=True,        # Enable two-hand gestures
+    # Behavior settings
+    cursor_smoothing=3,
+    gesture_cooldown=0.25,
+    pinch_threshold=20,
     
     # UI settings
-    show_ui=True,                # Show camera window
-    show_debug=False,            # Show debug info
-    show_fps=True,               # Show FPS counter
+    show_ui=True,
+    show_debug=False
 )
 ```
 
-## 🎯 Use Cases
+## 🎓 Examples
 
-### Presentations
-- Control slides with gestures
-- Pause/play videos with open palm
-- Navigate with thumbs up/down
-
-### Media Playback
-- Control video player without touching keyboard
-- Scroll through content with fist gestures
-- Pause/play with palm gesture
-
-### Accessibility
-- Alternative input method for users with limited keyboard access
-- Hands-free computer control
-- Customizable gesture mappings
-
-### Gaming & VR
-- Natural gesture controls
-- Immersive interaction
-- Prototype gesture-based interfaces
-
-## 🏗️ Library Structure
-
-```
-gestify/
-├── gestify_lib/                    # Main library package
-│   ├── __init__.py                # Package exports
-│   ├── __main__.py                # CLI entry point
-│   ├── core/                      # Core components
-│   │   ├── controller.py          # Main controller
-│   │   └── config.py              # Configuration management
-│   ├── detectors/                 # Detection modules
-│   │   ├── hand_detector.py       # Hand detection (MediaPipe)
-│   │   ├── face_detector.py       # Face & attention tracking
-│   │   └── gesture_recognizer.py  # Gesture recognition logic
-│   └── utils/                     # Utility modules
-│       ├── action_executor.py     # System action execution
-│       └── ui_renderer.py         # UI rendering
-├── examples/                      # Example scripts
-│   ├── basic_usage.py
-│   ├── custom_config.py
-│   └── two_hand_mode.py
-├── setup.py                       # Package setup
-├── requirements.txt               # Dependencies
-└── README.md                      # This file
-```
-
-## 🔧 Development
-
-### Project Structure
-
-The library is organized into distinct modules:
-
-- **`core/`**: Main controller and configuration
-- **`detectors/`**: Hand, face, and gesture detection
-- **`utils/`**: System actions and UI rendering
-
-### Adding Custom Gestures
-
-To add a new gesture, modify `gesture_recognizer.py`:
+### 1. Basic Gesture Control
 
 ```python
-# 1. Add gesture to enum
-class Gesture(Enum):
-    MY_GESTURE = auto()
+from gestify_lib import GestifyController
 
-# 2. Add recognition logic
-def _recognize_single_hand(self, state: HandState) -> Gesture:
-    # Your detection logic here
-    if state.fingers_extended == [True, True, False, False, False]:
-        return Gesture.MY_GESTURE
-    ...
-
-# 3. Add action to action_executor.py
-def execute(self, gesture: Gesture, cursor_pos=None):
-    if gesture == Gesture.MY_GESTURE:
-        # Your action here
-        pyautogui.press('f')
+controller = GestifyController()
+controller.run()
 ```
 
-### Running Tests
+### 2. Custom Game
 
-```bash
-# Install dev dependencies
-pip install -e ".[dev]"
+```python
+from gestify_lib.games import PuzzleGame
+import cv2
 
-# Run tests (when available)
-pytest tests/
+# Create custom game
+game = PuzzleGame(1920, 1080, difficulty="hard")
 
-# Run linting
-flake8 gestify_lib/
-black gestify_lib/
+# Game loop
+while True:
+    # Get hand position from your tracking
+    cursor_pos = (x, y)
+    is_picking = detect_pinch()
+    is_releasing = not is_picking
+    
+    # Update game
+    game.update(cursor_pos, is_picking, is_releasing, is_holding)
+    
+    # Draw game
+    frame = get_camera_frame()
+    game.draw(frame)
+    cv2.imshow('Game', frame)
+```
+
+### 3. Fast Mode Gesture Control
+
+```python
+from gestify_lib import GestifyController, GestifyConfig
+
+config = GestifyConfig(
+    max_hands=1,
+    enable_face_tracking=False,
+    hand_model_complexity=0,  # Lite model
+    cursor_smoothing=2
+)
+
+controller = GestifyController(config)
+controller.run()
 ```
 
 ## 🐛 Troubleshooting
 
 ### Camera Issues
 
-**Problem**: Camera not found or not opening
+```bash
+# Test setup
+python test_setup.py
 
-**Solutions**:
-1. Check if another app is using the camera (Zoom, FaceTime, etc.)
-2. Grant camera permissions in System Preferences (macOS)
-3. Try different camera index: `gestify --camera 1`
-4. Run camera fix script: `python fix_camera.sh`
+# Check camera permissions
+# macOS: System Preferences → Security & Privacy → Camera
 
-### Permission Issues (macOS)
-
-**Problem**: Gestures not controlling system
-
-**Solutions**:
-1. Grant Accessibility permissions: System Preferences → Security & Privacy → Privacy → Accessibility
-2. Grant Screen Recording permissions (for cursor control)
+# Try different camera
+gestify --camera 1
+```
 
 ### Performance Issues
 
-**Problem**: Low FPS or laggy gestures
+- Use fast mode: `gestify --fast`
+- Disable face tracking: `gestify --no-face`
+- Lower resolution in config
+- Close other camera applications
 
-**Solutions**:
-1. Use fast mode: `gestify --fast`
-2. Disable face tracking: `gestify --no-face`
-3. Reduce camera resolution: `gestify --width 320 --height 240`
-4. Use single hand: `gestify --max-hands 1`
-5. Close other resource-intensive applications
+### Gesture Recognition Issues
 
-### Gesture Detection Issues
+- Ensure good lighting
+- Keep hands clearly visible
+- Use distinct gestures
+- Adjust confidence thresholds
+- Check gesture cooldown timing
 
-**Problem**: Gestures not recognized reliably
+## 📊 Requirements
 
-**Solutions**:
-1. Ensure good lighting
-2. Keep hand at comfortable distance from camera (30-60cm)
-3. Use accurate mode: `gestify --accurate`
-4. Increase confidence threshold: `gestify --hand-confidence 0.8`
-5. Make gestures more distinct and deliberate
+- Python 3.8+
+- Webcam (720p or higher recommended)
+- Operating System: macOS, Linux, or Windows
+- RAM: 4GB minimum, 8GB recommended
+- Good lighting conditions
 
-## 💡 Tips for Best Experience
+## 📝 Dependencies
 
-1. **Lighting**: Ensure good, even lighting on your hands
-2. **Distance**: Keep hands 30-60cm from camera
-3. **Background**: Plain background helps detection
-4. **Distinct Gestures**: Make clear, deliberate gestures
-5. **Practice**: Spend a few minutes learning gesture shapes
-6. **Calibration**: Adjust `cursor_smoothing` and `gesture_cooldown` to your preference
+Core dependencies (auto-installed):
+- OpenCV (cv2) - Video processing
+- MediaPipe - Hand/face tracking
+- NumPy - Numerical operations
+- PyAutoGUI - System control
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit issues or pull requests.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-### Development Setup
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-```bash
-# Clone repo
-git clone https://github.com/ranjeetds/gestify.git
-cd gestify
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install in development mode
-pip install -e ".[dev]"
-
-# Make changes and test
-python -m gestify_lib
-```
-
-## 📝 License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- **MediaPipe**: Hand and face detection
-- **OpenCV**: Computer vision and camera capture
-- **PyAutoGUI**: System control and automation
-
-## 🔮 Future Enhancements
-
-- [ ] Custom gesture recording and training
-- [ ] Gesture macros and scripting
-- [ ] Multi-monitor support
-- [ ] Voice command integration
-- [ ] Mobile app for remote control
-- [ ] Plugin system for custom actions
-- [ ] Gesture history and analytics
-- [ ] Pre-trained gesture models
-- [ ] Web interface for configuration
+- [MediaPipe](https://mediapipe.dev/) for hand and face tracking
+- [OpenCV](https://opencv.org/) for computer vision
+- [PyAutoGUI](https://pyautogui.readthedocs.io/) for system control
 
 ## 📧 Contact
 
-For questions, issues, or suggestions, please open an issue on GitHub:
-https://github.com/ranjeetds/gestify/issues
+For issues, questions, or suggestions:
+- GitHub Issues: https://github.com/ranjeetds/gestify/issues
+- Repository: https://github.com/ranjeetds/gestify
 
 ---
 
-**Made with ❤️ by the Gestify team**
+**Made with ❤️ for natural human-computer interaction**
 
-*Control your computer naturally with the power of AI*
+🎮 **Try the games:** `python run_ar_game.py` or `python run_pingpong.py`  
+✋ **Control your computer:** `gestify --fast`  
+📚 **Read the code:** Well-documented, easy to extend
