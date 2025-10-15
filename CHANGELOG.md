@@ -20,13 +20,32 @@ All notable changes to this project will be documented in this file.
   - Intelligent 2-hand selection (nearest hands only)
   - Buffer zones to prevent player confusion
 
+- **AR Piano** 🎹 NEW!: Interactive piano with song learning
+  - 8 playable keys (C major scale + C5)
+  - Touch keys with fingertips to play notes
+  - Visual feedback for key presses (white/black keys)
+  - 4 pre-loaded songs:
+    - Happy Birthday
+    - Twinkle Twinkle Little Star
+    - Mary Had a Little Lamb
+    - Jingle Bells
+  - Falling note guides (like Piano Tiles/Simply Piano)
+  - Real-time hit detection with hit zone indicator
+  - Score and combo system
+  - Build combos by hitting consecutive notes correctly
+  - Song selection menu (press 1-4)
+  - Quick launch: `python run_piano.py`
+
 - **Games Module** (`gestify_lib/games/`)
   - `ARGameController` - Puzzle game controller
   - `PingPongGameController` - Ping pong game controller
+  - `ARPianoController` - Piano game controller 🎹 NEW!
   - `PuzzleGame` - Puzzle game logic
   - `PingPongGame` - Ping pong game logic
+  - `ARPiano` - Piano game logic 🎹 NEW!
   - `GameObject`, `PuzzlePiece`, `TargetZone` - Game objects
   - `Ball`, `Paddle` - Ping pong components
+  - `PianoKey`, `FallingNote` - Piano components 🎹 NEW!
 
 ### Improved - Hand Tracking
 - **Direct Hand Tracking**: Cursor always follows index finger position
