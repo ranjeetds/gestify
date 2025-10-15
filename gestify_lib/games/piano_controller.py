@@ -46,7 +46,7 @@ class RealisticARPianoController:
         )
         
         # Initialize gesture recognizer for menu gestures
-        self.gesture_recognizer = GestureRecognizer()
+        self.gesture_recognizer = GestureRecognizer(self.hand_detector)
         
         # Initialize piano game
         self.piano = RealisticARPiano(game_width, game_height)
