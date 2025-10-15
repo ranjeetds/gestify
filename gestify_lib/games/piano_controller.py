@@ -1,27 +1,23 @@
 """
-AR Piano Controller - Hand tracking for piano playing
+Realistic AR Piano Controller - Multi-finger tracking with motion detection
 """
 
 import cv2
 import time
 import numpy as np
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Dict
 
 from ..core.config import GestifyConfig
 from ..detectors.hand_detector import HandDetector, Hand
-from .piano_game import ARPiano
+from ..detectors.gesture_recognizer import GestureRecognizer
+from .piano_game import RealisticARPiano, Fingertip
 
 
-class ARPianoController:
-    """AR Piano controller with hand tracking"""
+class RealisticARPianoController:
+    """Realistic AR Piano controller with all-finger tracking"""
     
     def __init__(self, game_width: int = 1920, game_height: int = 1080):
-        """Initialize AR piano controller
-        
-        Args:
-            game_width: Game resolution width
-            game_height: Game resolution height
-        """
+        """Initialize realistic AR piano controller"""
         self.game_width = game_width
         self.game_height = game_height
         
@@ -34,7 +30,7 @@ class ARPianoController:
             enable_face_tracking=False,
             show_ui=True,
             show_debug=False,
-            cursor_smoothing=2
+            cursor_smoothing=1
         )
         
         # Initialize camera
@@ -49,8 +45,11 @@ class ARPianoController:
             model_complexity=self.config.hand_model_complexity
         )
         
+        # Initialize gesture recognizer for menu gestures
+        self.gesture_recognizer = GestureRecognizer()
+        
         # Initialize piano game
-        self.piano = ARPiano(game_width, game_height)
+        self.piano = RealisticARPiano(game_width, game_height)
         
         # State
         self.running = False
@@ -58,10 +57,19 @@ class ARPianoController:
         self.frame_count = 0
         self.start_time = time.time()
         
-        # Hand tracking
-        self._hand_history = {'left': [], 'right': []}
+        # Fingertip tracking history
+        self._fingertip_history: Dict[str, List[Tuple[int, int]]] = {}
         
-        print(f"✅ AR Piano initialized: {game_width}x{game_height}")
+        # Finger landmark indices (MediaPipe)
+        self.finger_tips = {
+            'thumb': self.hand_detector.THUMB_TIP,
+            'index': self.hand_detector.INDEX_TIP,
+            'middle': self.hand_detector.MIDDLE_TIP,
+            'ring': self.hand_detector.RING_TIP,
+            'pinky': self.hand_detector.PINKY_TIP,
+        }
+        
+        print(f"✅ Realistic AR Piano initialized: {game_width}x{game_height}")
     
     def _init_camera(self):
         """Initialize camera"""
@@ -103,21 +111,25 @@ class ARPianoController:
         
         self.running = True
         
-        print("\n🎹 AR PIANO STARTED!")
+        print("\n🎹 REALISTIC AR PIANO STARTED!")
         print("=" * 60)
-        print("Welcome to AR Piano!")
+        print("Welcome to Realistic AR Piano!")
         print("")
         print("How to Play:")
-        print("  • Position hands above piano keys")
-        print("  • Touch keys with fingertips to play")
-        print("  • Select a song from the menu")
-        print("  • Follow falling notes and hit keys in time")
+        print("  • Hold hands above the piano keyboard")
+        print("  • Move fingers DOWN to press keys (like real piano)")
+        print("  • All 10 fingers are tracked!")
+        print("  • Fast downward motion = key press")
+        print("")
+        print("Song Learning:")
+        print("  • Hover hand over song for 1.5 seconds to select")
+        print("  • Follow falling notes")
+        print("  • Press keys when notes reach the HIT zone")
         print("  • Build combos for higher scores!")
         print("")
-        print("Controls:")
-        print("  • 1-4: Select song from menu")
-        print("  • M: Return to song menu")
-        print("  • Q or ESC: Quit")
+        print("Gestures:")
+        print("  • Open palm: Return to menu")
+        print("  • No keyboard needed - pure gesture control!")
         print("=" * 60)
         
         # Create fullscreen window
@@ -142,12 +154,10 @@ class ARPianoController:
                 # Process frame
                 self._process_frame(frame)
                 
-                # Handle keyboard input
+                # Handle ESC to quit (only keyboard shortcut)
                 key = cv2.waitKey(1) & 0xFF
-                if key == ord('q') or key == 27:  # Q or ESC
+                if key == 27:  # ESC
                     break
-                elif key != 255:  # Any other key
-                    self.piano.handle_key_press(key)
                 
                 self.frame_count += 1
         
@@ -180,44 +190,50 @@ class ARPianoController:
         
         frame_rgb.flags.writeable = True
         
-        # Get fingertip positions
+        # Get all fingertips with velocity tracking
         h, w = frame.shape[:2]
-        left_hand_pos, right_hand_pos = self._get_hand_positions(hands, w, h)
+        fingertips = self._get_all_fingertips(hands, w, h)
+        
+        # Check for gestures (for menu control)
+        if hands and not self.piano.show_song_menu:
+            gesture, _ = self.gesture_recognizer.recognize(hands)
+            if gesture:
+                self.piano.handle_gesture(gesture.name)
         
         # Update piano
-        self.piano.update(left_hand_pos, right_hand_pos)
+        self.piano.update(fingertips)
         
         # Draw piano on frame
         frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
-        self.piano.draw(frame_bgr)
+        self.piano.draw(frame_bgr, fingertips)
         
         # Draw hand landmarks (semi-transparent)
         if hands:
             overlay = frame_bgr.copy()
             for hand in hands:
                 self.hand_detector.draw_landmarks(overlay, [hand])
-            cv2.addWeighted(overlay, 0.3, frame_bgr, 0.7, 0, frame_bgr)
+            cv2.addWeighted(overlay, 0.2, frame_bgr, 0.8, 0, frame_bgr)
         
-        # Draw fingertip indicators
-        if left_hand_pos:
-            cv2.circle(frame_bgr, left_hand_pos, 15, (0, 255, 0), 3)
-            cv2.circle(frame_bgr, left_hand_pos, 5, (0, 255, 0), -1)
-        
-        if right_hand_pos:
-            cv2.circle(frame_bgr, right_hand_pos, 15, (0, 0, 255), 3)
-            cv2.circle(frame_bgr, right_hand_pos, 5, (0, 0, 255), -1)
-        
-        # Draw FPS
+        # Draw FPS and instructions
         cv2.putText(frame_bgr, f"FPS: {int(self.fps)}", 
                    (10, self.game_height - 30),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
         
+        cv2.putText(frame_bgr, f"Fingers tracked: {len(fingertips)}", 
+                   (10, self.game_height - 60),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
+        
+        if not self.piano.show_song_menu:
+            cv2.putText(frame_bgr, "Move fingers DOWN to press keys", 
+                       (self.game_width // 2 - 200, self.game_height - 30),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (200, 200, 200), 1)
+        
         # Show window
         cv2.imshow('AR Piano', frame_bgr)
     
-    def _get_hand_positions(self, hands: Optional[List[Hand]], 
-                           width: int, height: int) -> Tuple[Optional[Tuple[int, int]], Optional[Tuple[int, int]]]:
-        """Get fingertip positions for both hands
+    def _get_all_fingertips(self, hands: Optional[List[Hand]], 
+                           width: int, height: int) -> List[Fingertip]:
+        """Get all fingertips from all hands with velocity tracking
         
         Args:
             hands: Detected hands
@@ -225,63 +241,51 @@ class ARPianoController:
             height: Frame height
             
         Returns:
-            (left_hand_pos, right_hand_pos) - Index fingertip positions
+            List of Fingertip objects with position and velocity
         """
         if not hands:
-            return None, None
+            return []
         
-        # Select up to 2 nearest hands
-        if len(hands) > 2:
-            hands = self._select_nearest_hands(hands, width, height, count=2)
+        fingertips = []
         
-        left_hand_pos = None
-        right_hand_pos = None
-        
-        for hand in hands:
-            # Get index finger tip position
-            index_tip = hand.get_landmark_px(self.hand_detector.INDEX_TIP, width, height)
+        for hand_idx, hand in enumerate(hands):
+            hand_label = f"{hand.label}_{hand_idx}"
             
-            # Determine which hand based on position
-            center = width // 2
-            
-            if index_tip[0] < center:
-                # Left side
-                left_hand_pos = self._smooth_hand_position(index_tip, 'left')
-            else:
-                # Right side
-                right_hand_pos = self._smooth_hand_position(index_tip, 'right')
+            # Get all 5 fingertips
+            for finger_name, landmark_idx in self.finger_tips.items():
+                try:
+                    # Get fingertip position
+                    position = hand.get_landmark_px(landmark_idx, width, height)
+                    
+                    # Create unique key for this fingertip
+                    tip_key = f"{hand_label}_{finger_name}"
+                    
+                    # Get previous position from history
+                    history = self._fingertip_history.get(tip_key, [])
+                    previous_position = history[-1] if history else None
+                    
+                    # Create fingertip object
+                    fingertip = Fingertip(
+                        position=position,
+                        previous_position=previous_position,
+                        name=f"{hand.label}_{finger_name}"
+                    )
+                    
+                    # Calculate velocity
+                    fingertip.update_velocity()
+                    
+                    # Update history
+                    history.append(position)
+                    if len(history) > 3:  # Keep last 3 positions
+                        history.pop(0)
+                    self._fingertip_history[tip_key] = history
+                    
+                    fingertips.append(fingertip)
+                    
+                except Exception as e:
+                    continue
         
-        return left_hand_pos, right_hand_pos
-    
-    def _select_nearest_hands(self, hands: List[Hand], width: int, height: int, count: int = 2) -> List[Hand]:
-        """Select N nearest hands"""
-        hand_sizes = []
-        for hand in hands:
-            wrist = hand.get_landmark_px(self.hand_detector.WRIST, width, height)
-            middle_tip = hand.get_landmark_px(self.hand_detector.MIDDLE_TIP, width, height)
-            
-            import math
-            size = math.sqrt((middle_tip[0] - wrist[0])**2 + (middle_tip[1] - wrist[1])**2)
-            hand_sizes.append((size, hand))
-        
-        hand_sizes.sort(key=lambda x: x[0], reverse=True)
-        return [hand for _, hand in hand_sizes[:count]]
-    
-    def _smooth_hand_position(self, pos: Tuple[int, int], side: str) -> Tuple[int, int]:
-        """Smooth hand position using history"""
-        history = self._hand_history[side]
-        
-        history.append(pos)
-        if len(history) > 3:  # Less smoothing for piano (more responsive)
-            history.pop(0)
-        
-        # Average position
-        if len(history) > 0:
-            avg_x = sum(p[0] for p in history) // len(history)
-            avg_y = sum(p[1] for p in history) // len(history)
-            return (avg_x, avg_y)
-        
-        return pos
+        return fingertips
     
     def _cleanup(self):
         """Clean up resources"""
@@ -296,6 +300,9 @@ class ARPianoController:
         
         self.hand_detector.close()
         
+        # Cleanup piano (audio)
+        self.piano.cleanup()
+        
         # Print statistics
         elapsed = time.time() - self.start_time
         avg_fps = self.frame_count / elapsed if elapsed > 0 else 0
@@ -309,4 +316,3 @@ class ARPianoController:
     def stop(self):
         """Stop the piano"""
         self.running = False
-

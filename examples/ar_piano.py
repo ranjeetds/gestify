@@ -1,21 +1,39 @@
 #!/usr/bin/env python3
 """
-AR Piano Game Example
+Realistic AR Piano Game Example
 
-An AR piano where you play with your hands! Follow falling notes to learn songs.
+A realistic AR piano with ALL finger tracking and real sound!
+
+Revolutionary Features:
+- Tracks all 10 fingers simultaneously (all fingertips on both hands)
+- Real piano sound generation with harmonics
+- Motion-based key detection (press by moving finger DOWN)
+- 100% gesture-controlled interface (no keyboard needed)
+- Hover-to-select menu system
+- Vertical piano keyboard layout
 
 How to Play:
-- Position hands above piano keys on screen
-- Touch keys with fingertips to play notes
-- Select a song from menu (1-4)
-- Follow falling notes and hit keys in rhythm
-- Build combos for higher scores!
+- Hold hands above the vertical piano keyboard
+- Move ANY finger downward to press keys (like real piano)
+- Fast downward motion triggers the key press
+- All 10 fingers work independently!
+
+Song Learning Mode:
+- Hover hand over song name for 1.5 seconds to select
+- Follow falling notes down the screen
+- Press keys when notes reach the HIT zone
+- Build combos for higher scores
+
+Gesture Controls:
+- Hover + dwell: Select menu items (1.5 seconds)
+- Open palm: Return to main menu
+- ESC key: Quit (only keyboard shortcut)
 
 Songs Available:
-1. Happy Birthday
-2. Twinkle Twinkle Little Star
-3. Mary Had a Little Lamb
-4. Jingle Bells
+- Happy Birthday
+- Twinkle Twinkle Little Star
+- Mary Had a Little Lamb
+- Jingle Bells
 
 Run with:
     python examples/ar_piano.py
@@ -23,33 +41,37 @@ Run with:
 """
 
 import sys
-from gestify_lib.games import ARPianoController
+from gestify_lib.games import RealisticARPianoController
 
 
 def main():
-    print("\n🎹 Starting AR Piano")
+    print("\n🎹 Starting Realistic AR Piano")
     print("=" * 60)
-    print("Play piano with your hands!")
+    print("Play realistic piano with gesture controls!")
     print("=" * 60)
+    print("\n✨ Features:")
+    print("  ✓ All 10 fingers tracked")
+    print("  ✓ Real piano sounds")
+    print("  ✓ Motion-based key presses")
+    print("  ✓ Gesture-only interface")
     print("\nHow to Play:")
-    print("  1. Position hands above piano keys")
-    print("  2. Touch keys with fingertips")
-    print("  3. Select a song (press 1-4)")
-    print("  4. Follow falling notes")
-    print("  5. Hit keys in time with the music")
+    print("  1. Hold hands above piano keyboard")
+    print("  2. Move fingers DOWN to press keys")
+    print("  3. Any finger can press any key!")
+    print("  4. Hover over songs to select (1.5s)")
     print("\nScoring:")
-    print("  • Hit notes in the yellow zone for points")
+    print("  • Hit notes in the HIT zone")
     print("  • Build combos by hitting consecutive notes")
     print("  • Higher combos = more points!")
-    print("\nControls:")
-    print("  • 1-4: Select song")
-    print("  • M: Return to menu")
-    print("  • Q or ESC: Quit")
+    print("\nGestures:")
+    print("  • Hover: Select song (dwell time)")
+    print("  • Open palm: Return to menu")
+    print("  • ESC: Quit")
     print("=" * 60)
     
     try:
-        # Initialize piano controller
-        controller = ARPianoController(
+        # Initialize realistic piano controller
+        controller = RealisticARPianoController(
             game_width=1920,
             game_height=1080
         )
@@ -66,10 +88,11 @@ def main():
         traceback.print_exc()
         
         print("\n💡 Troubleshooting:")
-        print("   1. Make sure your camera is not being used by another app")
-        print("   2. Check camera permissions in System Preferences")
-        print("   3. Ensure you have good lighting")
-        print("   4. Keep both hands visible to camera")
+        print("   1. Install pygame: pip install pygame")
+        print("   2. Check camera permissions")
+        print("   3. Close other apps using camera")
+        print("   4. Ensure good lighting")
+        print("   5. Keep both hands visible")
         
         return 1
     

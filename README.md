@@ -18,7 +18,7 @@ A professional Python library for hand gesture recognition and AR games using co
 ### 🎮 AR Games (New!)
 - **Puzzle Game**: Match shapes using hand gestures
 - **Ping Pong**: Two-player competitive game with hand-controlled paddles
-- **AR Piano**: Play piano and learn songs with falling note guides
+- **Realistic AR Piano**: Play piano with ALL 10 fingers, real sound, gesture controls
 - **Full HD**: 1080p fullscreen immersive experience
 - **Natural Controls**: Direct hand tracking for intuitive gameplay
 
@@ -83,25 +83,39 @@ python run_pingpong.py
 - Move hand UP/DOWN to control paddle
 - First to 11 points wins!
 
-### AR Piano
+### AR Piano 🎹 REALISTIC!
 
 ```bash
-# Play piano and learn songs
+# Play realistic piano with ALL fingers
 python run_piano.py
 ```
 
+**Revolutionary Features:**
+- Track ALL 10 fingers simultaneously (both hands!)
+- Real piano sound generation with harmonics
+- Motion-based key presses (move finger DOWN like real piano)
+- 100% gesture-controlled interface (no keyboard needed!)
+- Hover-to-select menu system
+
 **Controls:**
-- Position hands above piano keys
-- Touch keys with fingertips to play
-- Press 1-4 to select a song
-- Follow falling notes to learn songs
-- Build combos for higher scores!
+- Hold hands above vertical piano keyboard
+- Move ANY finger downward to press keys
+- Fast downward motion = key press detection
+- Hover over song for 1.5 seconds to select
+- Open palm gesture to return to menu
 
 **Songs Available:**
 - Happy Birthday
 - Twinkle Twinkle Little Star
 - Mary Had a Little Lamb
 - Jingle Bells
+
+**Technical Highlights:**
+- All 5 fingertips tracked per hand (10 total)
+- Velocity-based press detection
+- Real-time audio synthesis
+- Dwell-time menu selection
+- Zero keyboard dependency
 
 ## 📖 Library Usage
 
@@ -162,10 +176,10 @@ controller.run()
 ```
 
 ```python
-# AR Piano
-from gestify_lib.games import ARPianoController
+# Realistic AR Piano
+from gestify_lib.games import RealisticARPianoController
 
-controller = ARPianoController(
+controller = RealisticARPianoController(
     game_width=1920,
     game_height=1080
 )
@@ -220,21 +234,32 @@ controller.run()
 - Move hand up/down: Control paddle
 - Hands automatically assigned to left/right players
 
-### AR Piano
+### AR Piano 🎹 REALISTIC!
 
-**Objective:** Play piano and learn songs
+**Objective:** Play realistic piano and learn songs
 
-**Features:**
-- 8 playable piano keys (C to C5)
-- 4 pre-loaded songs
-- Falling note guides (like Piano Tiles)
-- Score and combo system
-- Real-time hit detection
+**Revolutionary Features:**
+- **ALL 10 fingers tracked** (thumb, index, middle, ring, pinky × 2 hands)
+- **Real piano sounds** with harmonic synthesis
+- **Motion-based detection** (press by moving finger DOWN)
+- **Gesture-only interface** (zero keyboard dependency)
+- **Vertical piano layout** (13 keys: C to C5)
+- **Song learning mode** with falling note guides
+- **Score and combo system**
+- **Hover-to-select menus** (dwell time selection)
 
 **Controls:**
-- Touch keys with fingertips: Play notes
-- Follow falling notes: Learn songs
-- Build combos: Higher scores
+- Move ANY finger downward: Press key (velocity detection)
+- Hover over button: Select after 1.5 seconds
+- Open palm: Return to menu
+- ESC only: Quit (only keyboard shortcut)
+
+**Technical:**
+- Tracks all fingertips simultaneously
+- Velocity threshold: 8px/frame downward
+- Audio: Pygame synthesizer with ADSR envelope
+- Real-time harmonic generation
+- Zero latency key detection
 
 **Songs:**
 - Happy Birthday

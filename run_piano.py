@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Quick launcher for AR Piano
+Quick launcher for Realistic AR Piano with gesture controls
 """
 
 import sys
@@ -9,28 +9,39 @@ import os
 # Add project to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from gestify_lib.games import ARPianoController
+from gestify_lib.games import RealisticARPianoController
 
 
 def main():
     print("\n" + "=" * 60)
-    print("🎹  AR PIANO - Play with Your Hands!")
+    print("🎹  REALISTIC AR PIANO - All Fingers, Real Sound!")
     print("=" * 60)
-    print("\nGet Ready:")
-    print("  • Position hands above piano keys")
-    print("  • Touch keys with fingertips to play")
-    print("  • Select a song (1-4) and follow the notes")
-    print("\n4 Songs Available:")
-    print("  1. Happy Birthday")
-    print("  2. Twinkle Twinkle Little Star")
-    print("  3. Mary Had a Little Lamb")
-    print("  4. Jingle Bells")
+    print("\n✨ Revolutionary Features:")
+    print("  • Track ALL 10 fingers simultaneously")
+    print("  • Real piano sound generation")
+    print("  • Motion-based key presses (move finger DOWN)")
+    print("  • 100% gesture control (no keyboard needed)")
+    print("\n🎵 How to Play:")
+    print("  1. Hold hands above the vertical piano")
+    print("  2. Move ANY finger DOWN to press a key")
+    print("  3. Hear real piano sounds!")
+    print("  4. Hover over song in menu to select (1.5s)")
+    print("  5. Follow falling notes when song plays")
+    print("\n🎮 Gestures:")
+    print("  • Hover: Select song (dwell 1.5 seconds)")
+    print("  • Open palm: Return to menu")
+    print("  • ESC: Quit")
+    print("\n🎼 4 Songs Available:")
+    print("  • Happy Birthday")
+    print("  • Twinkle Twinkle Little Star")
+    print("  • Mary Had a Little Lamb")
+    print("  • Jingle Bells")
     print("=" * 60)
-    print("\n⏳ Starting AR Piano...\n")
+    print("\n⏳ Starting Realistic AR Piano...\n")
     
     try:
         # Create and run piano
-        controller = ARPianoController(
+        controller = RealisticARPianoController(
             game_width=1920,
             game_height=1080
         )
@@ -47,6 +58,7 @@ def main():
         print("   - Check camera permissions")
         print("   - Ensure good lighting")
         print("   - Keep hands visible")
+        print("   - Install pygame: pip install pygame")
         return 1
     
     return 0

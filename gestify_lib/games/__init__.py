@@ -7,8 +7,9 @@ from .puzzle_game import PuzzleGame
 from .ar_game_controller import ARGameController
 from .pingpong_game import PingPongGame, Ball, Paddle
 from .pingpong_controller import PingPongGameController
-from .piano_game import ARPiano, PianoKey, FallingNote
-from .piano_controller import ARPianoController
+from .piano_game import RealisticARPiano, PianoKey, FallingNote, Fingertip
+from .piano_controller import RealisticARPianoController
+from .piano_audio import PianoSoundGenerator
 
 __all__ = [
     'GameObject',
@@ -21,9 +22,11 @@ __all__ = [
     'Ball',
     'Paddle',
     'PingPongGameController',
-    'ARPiano',
+    'RealisticARPiano',
     'PianoKey',
     'FallingNote',
-    'ARPianoController',
+    'Fingertip',
+    'RealisticARPianoController',
+    'PianoSoundGenerator',
 ]
 
